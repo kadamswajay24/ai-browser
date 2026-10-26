@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self';">
+<title>AI Browser</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<!-- ── Titlebar ────────────────────────────────────────────────────────────── -->
+<div id="titlebar">
+  <div id="drag-region">
+    <span id="app-name">⚡ AI Browser</span>
+    <div id="tab-bar"></div>
+    <button id="btn-new-tab" title="New Tab (Ctrl+T)">+</button>
+  </div>
+  <div id="win-controls">
+    <button id="btn-minimize">─</button>
+    <button id="btn-maximize">□</button>
+    <button id="btn-close">✕</button>
+  </div>
+</div>
+
+<!-- ── Toolbar ─────────────────────────────────────────────────────────────── -->
+<div id="toolbar">
+  <div id="nav-buttons">
+    <button id="btn-back"    disabled>◀</button>
+    <button id="btn-forward" disabled>▶</button>
+    <button id="btn-reload"  title="Reload">↻</button>
+  </div>
+  <div id="address-bar-wrap">
+    <span id="security-icon">🌐</span>
+    <input id="address-bar" type="text" spellcheck="false" placeholder="Search or enter URL…" autocomplete="off">
+    <button id="btn-go">→</button>
+  </div>
+  <div id="toolbar-right">
+    <button id="btn-toggle-sidebar" title="Toggle AI Sidebar">🤖</button>
+  </div>
+</div>
+
+<!-- ── Main ────────────────────────────────────────────────────────────────── -->
+<div id="main">
+  <div id="viewport-placeholder"></div>
+
+  <!-- ── AI Sidebar ──────────────────────────────────────────────────────── -->
+  <div id="sidebar">
+
+    <!-- Header -->
+    <div id="sidebar-header">
+      <span id="tab-agent-label">AI Agent</span>
+      <div id="agent-status-badge" class="badge idle">IDLE</div>
+    </div>
+
+    <!-- Quiz detected banner -->
+    <div id="quiz-hint-banner" style="display:none">
+      <div id="quiz-hint-text">
+        📋 Quiz page detected:<br>
+        <span id="quiz-hint-url" style="font-size:10px;color:var(--text2)"></span>
+      </div>
+      <div id="quiz-hint-actions">
+        <button id="hint-start-btn">▶ Start Agent</button>
+        <button id="hint-dismiss-btn">✕</button>
+      </div>
+    </div>
+
+    <!-- Settings -->
+    <details id="sidebar-settings">
+      <summary>⚙ Settings</summary>
+      <div class="settings-row"><label>Ollama Host</label><input id="set-host"     type="text" value="http://127.0.0.1:11434"></div>
+      <div class="settings-row"><label>Model</label>      <input id="set-model"    type="text" value="qwen2.5:3b"></div>
+      <div class="settings-row"><label>Step delay (ms)</label><input id="set-delay" type="number" value="1000" min="200" max="5000"></div>
+      <div class="settings-row"><label>Max steps</label>  <input id="set-maxsteps" type="number" value="50" min="1" max="200"></div>
+      <button id="btn-save-settings">Save</button>
+      <button id="btn-check-ollama">Check Ollama</button>
+      <div id="ollama-status"></div>
+    </details>
+
+    <!-- Task input -->
+    <div id="task-section">
+      <div id="task-label">Task Instruction</div>
+      <textarea id="task-input" rows="4"
+        placeholder="e.g. Solve this practice quiz. Read every question, analyze the options, choose the best answer, select it on the page, move to the next question, and continue until done. Report uncertain questions and stop before final submission."
+      ></textarea>
+      <div id="task-buttons">
+        <button id="btn-start"  class="btn-primary">▶ Start</button>
+        <button id="btn-pause"  disabled>⏸ Pause</button>
+        <button id="btn-resume" disabled>▶ Resume</button>
+        <button id="btn-stop"   disabled>⏹ Stop</button>
+      </div>
+    </div>
+
+    <!-- Progress -->
+    <div id="progress-section">
+      <div id="progress-header">
+        <span>Progress</span>
+        <span id="progress-count">0 questions</span>
+      </div>
+      <div id="progress-bar-wrap"><div id="progress-bar"></div></div>
+    </div>
+
+    <!-- Log -->
+    <div id="log-section">
+      <div id="log-header">
+        <span>Activity Log</span>
+        <button id="btn-clear-log">Clear</button>
+      </div>
+      <div id="log-entries"></div>
+    </div>
+
+    <!-- Results -->
+    <div id="results-section" style="display:none">
+      <div id="results-header">Results</div>
+      <div id="results-body"></div>
+    </div>
+
+  </div><!-- /sidebar -->
+</div><!-- /main -->
+
+<script src="renderer.js"></script>
+</body>
+</html>

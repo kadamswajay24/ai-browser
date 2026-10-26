@@ -1,0 +1,76 @@
+# ── electron-builder configuration ────────────────────────────────────────────
+# This produces: dist/AIBrowserSetup.exe
+# Run:  npm run build
+# ──────────────────────────────────────────────────────────────────────────────
+
+appId: com.aibrowser.app
+productName: AI Browser
+copyright: "Copyright © 2024 AI Browser"
+
+directories:
+  output: dist
+  buildResources: assets
+
+# ── Files to pack into the Electron app ───────────────────────────────────────
+files:
+  - src/**/*
+  - assets/**/*
+  - package.json
+  - "!node_modules/.cache/**"
+  - "!**/*.map"
+  - "!tests/**"
+  - "!installer/**"
+  - "!dist/**"
+  - "!README.md"
+
+# ── Windows build ─────────────────────────────────────────────────────────────
+win:
+  target:
+    - target: nsis
+      arch:   [x64]
+  icon: assets/icon.ico
+  # Sign if cert is available (optional — remove if no code-signing cert)
+  # signingHashAlgorithms: [sha256]
+  # certificateFile: cert.pfx
+  # certificatePassword: ""
+
+# ── NSIS installer config ─────────────────────────────────────────────────────
+nsis:
+  # One-click = false → shows directory picker and component selection
+  oneClick:                      false
+  allowToChangeInstallationDirectory: true
+  allowElevation:                true
+
+  # Shortcuts
+  createDesktopShortcut:         true
+  createStartMenuShortcut:       true
+  shortcutName:                  "AI Browser"
+
+  # Icons
+  installerIcon:                 "assets/icon.ico"
+  uninstallerIcon:               "assets/icon.ico"
+
+  # Branding
+  installerHeader:               "assets/installer/header.bmp"   # 150×57 px BMP (optional)
+  installerSidebar:              "assets/installer/sidebar.bmp"  # 164×314 px BMP (optional)
+
+  # License shown on install
+  license:                       "LICENSE.txt"
+
+  # Custom NSIS script that adds the Ollama + model download steps
+  # This runs AFTER the main app is installed
+  include:                       "installer/OllamaInstall.nsh"
+
+  # Registry key for Add/Remove Programs
+  displayLanguageSelector:       false
+  installerLanguages:            [English]
+
+  # Uninstaller
+  deleteAppDataOnUninstall:      false   # keep user settings on uninstall
+
+# ── Additional metadata ────────────────────────────────────────────────────────
+extraMetadata:
+  version: "1.0.0"
+
+# ── Publish (set to null = no auto-publish) ───────────────────────────────────
+publish: null
